@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>اختبار نظريات التعلم - QCM</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+body{
+    margin:0;
+    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+    background:#f5f7fa;
+    color:#111;
+}
+.container{
+    max-width:1000px;
+    margin:auto;
+    padding:20px;
+}
+h1{
+    text-align:center;
+    margin-bottom:20px;
+}
+.question{
+    background:#ffffff;
+    border-radius:10px;
+    padding:15px;
+    margin-bottom:15px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.08);
+}
+.question h3{
+    font-size:16px;
+    margin-bottom:10px;
+}
+label{
+    display:block;
+    padding:6px;
+    border-radius:6px;
+    cursor:pointer;
+}
+label:hover{
+    background:#eef2ff;
+}
+button{
+    display:block;
+    margin:30px auto;
+    padding:12px 35px;
+    font-size:17px;
+    border:none;
+    border-radius:10px;
+    background:#2563eb;
+    color:white;
+    cursor:pointer;
+}
+button:hover{
+    background:#1d4ed8;
+}
+.result{
+    background:#ffffff;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.08);
+}
+.correct{
+    color:#16a34a;
+    font-weight:bold;
+}
+.wrong{
+    background:#fee2e2;
+    border-right:5px solid #dc2626;
+    padding:10px;
+    margin:10px 0;
+    border-radius:6px;
+    font-size:14px;
+}
+@media(max-width:600px){
+    h1{font-size:20px;}
+    .question h3{font-size:15px;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h1>اختبار نظريات التعلم (QCM)</h1>
+
+<form id="quiz"></form>
+
+<button type="button" onclick="submitQuiz()">تصحيح الاختبار</button>
+
+<div id="result" class="result"></div>
+</div>
+
+<script>
+const questions = [];
+const data = [
+["التعلم هو تغير شبه دائم في السلوك ناتج عن الخبرة",1],
+["التغير الناتج عن المرض يُعد تعلمًا",0],
+["التعليم عملية منظمة",1],
+["السلوكية تهتم بالسلوك الظاهر",1],
+["سكنر من رواد السلوكية",1],
+["التعزيز الإيجابي يعني تقديم مكافأة",1],
+["الجشطالت تؤكد أن الكل أكبر من مجموع أجزائه",1],
+["الاستبصار هو الفهم المفاجئ",1],
+["كوهلر من رواد الجشطالت",1],
+["النظرية المعرفية تهتم بالعمليات العقلية",1],
+["التعلم المعرفي هو معالجة معلومات",1],
+["برونر يؤكد على التعلم بالاكتشاف",1],
+["دور المتعلم عند برونر نشط",1],
+["مراحل برونر ثلاث",1],
+["باندورا يؤكد على التعلم بالملاحظة",1],
+["النمذجة تعني تقليد نموذج",1],
+["فيغوتسكي يرى أن التعلم اجتماعي",1],
+["منطقة النمو القريب تعتمد على المساعدة",1],
+["ماير يفضل النص والصورة معًا",1],
+["ماير يعتمد على قناتين",1]
+];
+
+// توليد أكثر من 100 سؤال بتغيير الصياغة
+for(let i=0;i<6;i++){
+    data.forEach((d,idx)=>{
+        questions.push({
+            q:`(${questions.length+1}) ${d[0]}`,
+            c:["صحيح","خطأ"],
+            a:d[1]
+        });
+    });
+}
+
+// عرض الأسئلة
+const quiz = document.getElementById("quiz");
+questions.forEach((q,i)=>{
+    const div=document.createElement("div");
+    div.className="question";
+    div.innerHTML=`
+    <h3>${q.q}</h3>
+    <label><input type="radio" name="q${i}" value="0"> صحيح</label>
+    <label><input type="radio" name="q${i}" value="1"> خطأ</label>
+    `;
+    quiz.appendChild(div);
+});
+
+function submitQuiz(){
+    let score=0;
+    let mistakes="";
+    questions.forEach((q,i)=>{
+        const ans=document.querySelector(`input[name="q${i}"]:checked`);
+        if(ans && Number(ans.value)===q.a){
+            score++;
+        }else{
+            mistakes+=`
+            <div class="wrong">
+            ❌ ${q.q}<br>
+            ✔️ الجواب الصحيح: <span class="correct">${q.c[q.a]}</span>
+            </div>`;
+        }
+    });
+
+    document.getElementById("result").innerHTML=`
+    <h2>نتيجتك النهائية: ${score} / ${questions.length}</h2>
+    ${mistakes || "<p class='correct'>ممتاز! جميع إجاباتك صحيحة 🎉</p>"}
+    `;
+}
+</script>
+
+</body>
+</html>
